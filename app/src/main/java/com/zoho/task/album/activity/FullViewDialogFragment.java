@@ -60,7 +60,7 @@ public class FullViewDialogFragment extends DialogFragment {
 
         Glide.with(getActivity()).load(imageUrl)
                 .thumbnail(0.5f)
-                .placeholder(R.mipmap.default_full)
+                .placeholder(R.mipmap.default_placeholder)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .listener(new RequestListener<String, GlideDrawable>() {

@@ -53,7 +53,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         GalleryData galleryData = galleryDataList.get(position);
 
         Glide.with(mContext).load(galleryData.getThumbnailUrl())
-                .thumbnail(0.5f).placeholder(R.mipmap.default_thumbnail)
+                .thumbnail(0.5f).placeholder(R.mipmap.default_placeholder)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .listener(new RequestListener<String, GlideDrawable>() {
