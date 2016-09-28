@@ -1,4 +1,4 @@
-package com.zoho.task.album.app;
+package com.zoho.task.album.rest;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

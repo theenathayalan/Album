@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.AlbumActivity"
+            android:name=".album.AlbumActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.GalleryActivity"
+            android:name=".gallery.GalleryActivity"
             android:screenOrientation="portrait" />
     </application>
 

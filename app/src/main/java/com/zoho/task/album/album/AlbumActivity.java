@@ -1,4 +1,4 @@
-package com.zoho.task.album.activity;
+package com.zoho.task.album.album;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,29 +7,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.zoho.task.album.R;
-import com.zoho.task.album.adapter.AlbumsAdapter;
-import com.zoho.task.album.app.ApiClient;
-import com.zoho.task.album.app.ApiInterface;
+import com.zoho.task.album.album.adapter.AlbumsAdapter;
+import com.zoho.task.album.album.model.AlbumData;
+import com.zoho.task.album.gallery.GalleryActivity;
 import com.zoho.task.album.helper.DividerItemDecoration;
 import com.zoho.task.album.helper.RecyclerTouchListener;
-import com.zoho.task.album.model.AlbumData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class AlbumActivity extends AppCompatActivity {
+public class AlbumActivity extends AppCompatActivity implements AlbumView {
     private List<AlbumData> albumDataList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AlbumsAdapter mAdapter;
     private ProgressDialog progressDialog;
+    private AlbumPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +32,8 @@ public class AlbumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album);
         initializeObject();
         setRecyclerClickListener();
-        callAlbumsAPI();
+        presenter = new AlbumPresenterImpl(this);
+        presenter.callAlbumAPI(this);
     }
 
     /**
@@ -45,7 +41,28 @@ public class AlbumActivity extends AppCompatActivity {
      */
     private void initializeObject() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        setAdapter();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Downloading json...");
+    }
+
+    @Override
+    public void showProgress() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgress() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onSuccess(List<AlbumData> albumDataList) {
+        setAdapter(albumDataList);
+    }
+
+    @Override
+    public void onException() {
+
     }
 
     /**
@@ -68,37 +85,10 @@ public class AlbumActivity extends AppCompatActivity {
     }
 
     /**
-     * callAlbumsAPI method is used for call the albums api.
-     */
-    private void callAlbumsAPI() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Downloading json...");
-        progressDialog.show();
-        ApiInterface apiService =
-                ApiClient.getClient(AlbumActivity.this).create(ApiInterface.class);
-        Call<List<AlbumData>> call = apiService.getAlbumsAPI();
-
-        call.enqueue(new Callback<List<AlbumData>>() {
-            @Override
-            public void onResponse(Call<List<AlbumData>> call, Response<List<AlbumData>> response) {
-                albumDataList = response.body();
-                setAdapter();
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<List<AlbumData>> call, Throwable t) {
-                // Log error here since request failed
-                Log.e("", t.toString());
-                progressDialog.dismiss();
-            }
-        });
-    }
-
-    /**
      * setAdapter method is used for set adapter to recycler view.
      */
-    private void setAdapter() {
+    private void setAdapter(List<AlbumData> albumDataList) {
+        this.albumDataList = albumDataList;
         mAdapter = new AlbumsAdapter(albumDataList);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -107,5 +97,4 @@ public class AlbumActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
     }
-
 }

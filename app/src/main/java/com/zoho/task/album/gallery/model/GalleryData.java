@@ -1,4 +1,4 @@
-package com.zoho.task.album.model;
+package com.zoho.task.album.gallery.model;
 
 import com.google.gson.annotations.SerializedName;
 

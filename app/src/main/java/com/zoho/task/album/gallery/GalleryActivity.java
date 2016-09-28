@@ -1,4 +1,4 @@
-package com.zoho.task.album.activity;
+package com.zoho.task.album.gallery;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -7,37 +7,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.zoho.task.album.R;
-import com.zoho.task.album.adapter.GalleryAdapter;
-import com.zoho.task.album.app.ApiClient;
-import com.zoho.task.album.app.ApiInterface;
+import com.zoho.task.album.gallery.adapter.GalleryAdapter;
+import com.zoho.task.album.gallery.model.GalleryData;
 import com.zoho.task.album.helper.RecyclerTouchListener;
-import com.zoho.task.album.model.GalleryData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends AppCompatActivity implements GalleryView{
 
     private List<GalleryData> galleryDataList;
     private ProgressDialog progressDialog;
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
+    private GalleryPresenter galleryPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         initializeObject();
-        callPhotosAPI();
+//        callPhotosAPI();
+        galleryPresenter = new GalleryPresenterImpl(this);
+        galleryPresenter.callGalleryAPI(this);
     }
 
     /**
@@ -46,42 +42,63 @@ public class GalleryActivity extends AppCompatActivity {
     private void initializeObject() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         galleryDataList = new ArrayList<>();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Downloading json...");
+    }
+
+    @Override
+    public void showProgress() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgress() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onSuccess(List<GalleryData> galleryDataList) {
+        setGalleryAdapter(galleryDataList);
+    }
+
+    @Override
+    public void onException() {
+
     }
 
     /**
      * callPhotosAPI method is used for call the photos api.
      */
-    private void callPhotosAPI() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Downloading json...");
-        progressDialog.show();
-        ApiInterface apiService =
-                ApiClient.getClient(GalleryActivity.this).create(ApiInterface.class);
-        Call<List<GalleryData>> call = apiService.getPhotosAPI();
-        call.enqueue(new Callback<List<GalleryData>>() {
-            @Override
-            public void onResponse(Call<List<GalleryData>> call, Response<List<GalleryData>> response) {
-                galleryDataList = response.body();
-                setGalleryAdapter();
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<List<GalleryData>> call, Throwable t) {
-                // Log error here since request failed
-                Log.e("", t.toString());
-                progressDialog.dismiss();
-            }
-        });
-
-    }
+//    private void callPhotosAPI() {
+//
+//        progressDialog.show();
+//        ApiInterface apiService =
+//                ApiClient.getClient(GalleryActivity.this).create(ApiInterface.class);
+//        Call<List<GalleryData>> call = apiService.getPhotosAPI();
+//        call.enqueue(new Callback<List<GalleryData>>() {
+//            @Override
+//            public void onResponse(Call<List<GalleryData>> call, Response<List<GalleryData>> response) {
+//                galleryDataList = response.body();
+//                setGalleryAdapter();
+//                progressDialog.dismiss();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<GalleryData>> call, Throwable t) {
+//                // Log error here since request failed
+//                Log.e("", t.toString());
+//                progressDialog.dismiss();
+//            }
+//        });
+//
+//    }
 
     /**
      * setGalleryAdapter method is used for set the adapter to recyclerview.
      */
-    private void setGalleryAdapter() {
+    private void setGalleryAdapter(final List<GalleryData> galleryDataList) {
+        this.galleryDataList = galleryDataList;
         mAdapter = new GalleryAdapter(getApplicationContext(), galleryDataList);
-
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -93,7 +110,7 @@ public class GalleryActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("imageURL", galleryDataList.get(position).getUrl());
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                FullViewDialogFragment newFragment = FullViewDialogFragment.newInstance();
+                FullViewDialogFragment newFragment = new FullViewDialogFragment();
                 newFragment.setArguments(bundle);
                 newFragment.show(ft, "slideshow");
             }

@@ -1,7 +1,7 @@
-package com.zoho.task.album.app;
+package com.zoho.task.album.rest;
 
-import com.zoho.task.album.model.AlbumData;
-import com.zoho.task.album.model.GalleryData;
+import com.zoho.task.album.album.model.AlbumData;
+import com.zoho.task.album.gallery.model.GalleryData;
 
 import java.util.List;
 

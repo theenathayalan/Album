@@ -1,4 +1,4 @@
-package com.zoho.task.album.adapter;
+package com.zoho.task.album.album.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.zoho.task.album.R;
-import com.zoho.task.album.model.AlbumData;
+import com.zoho.task.album.album.model.AlbumData;
 
 import java.util.List;
 
