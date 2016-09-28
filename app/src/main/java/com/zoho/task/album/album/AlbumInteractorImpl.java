@@ -15,7 +15,7 @@ import retrofit2.Response;
 public class AlbumInteractorImpl implements AlbumInteractor {
 
     @Override
-    public void albumAPI(Context context,final OnLoginFinishedListener listener) {
+    public void albumAPI(Context context,final OnAlbumAPIFinishedListener listener) {
 
         ApiInterface apiService =
                 ApiClient.getClient(context).create(ApiInterface.class);

@@ -24,7 +24,7 @@ import com.zoho.task.album.album.model.AlbumData;
 
 import java.util.List;
 
-public class AlbumPresenterImpl implements AlbumPresenter, AlbumInteractor.OnLoginFinishedListener {
+public class AlbumPresenterImpl implements AlbumPresenter, AlbumInteractor.OnAlbumAPIFinishedListener{
 
     private AlbumView albumView;
     private AlbumInteractor albumInteractor;

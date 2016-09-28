@@ -24,7 +24,7 @@ import com.zoho.task.album.gallery.model.GalleryData;
 
 import java.util.List;
 
-public class GalleryPresenterImpl implements GalleryPresenter, GalleryInteractor.OnLoginFinishedListener {
+public class GalleryPresenterImpl implements GalleryPresenter, GalleryInteractor.OnGalleryAPIFinishedListener {
 
     private GalleryView galleryView;
     private GalleryInteractor galleryInteractor;

@@ -15,7 +15,7 @@ import retrofit2.Response;
 public class GalleryInteractorImpl implements GalleryInteractor {
 
     @Override
-    public void galleryAPI(Context context, final OnLoginFinishedListener listener) {
+    public void galleryAPI(Context context, final OnGalleryAPIFinishedListener listener) {
         ApiInterface apiService =
                 ApiClient.getClient(context).create(ApiInterface.class);
         Call<List<GalleryData>> call = apiService.getPhotosAPI();

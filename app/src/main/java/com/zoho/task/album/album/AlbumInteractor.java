@@ -26,12 +26,12 @@ import java.util.List;
 
 public interface AlbumInteractor {
 
-    interface OnLoginFinishedListener {
+    interface OnAlbumAPIFinishedListener {
 
         void onSuccess(List<AlbumData> albumDataList);
         void onException();
     }
 
-    void albumAPI(Context context, OnLoginFinishedListener listener);
+    void albumAPI(Context context, OnAlbumAPIFinishedListener listener);
 
 }

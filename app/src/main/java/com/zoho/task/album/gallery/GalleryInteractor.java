@@ -26,11 +26,12 @@ import java.util.List;
 
 public interface GalleryInteractor {
 
-    interface OnLoginFinishedListener {
+    interface OnGalleryAPIFinishedListener {
         void onSuccess(List<GalleryData> galleryDataList);
+
         void onException();
     }
 
-    void galleryAPI(Context context, GalleryInteractor.OnLoginFinishedListener listener);
+    void galleryAPI(Context context, GalleryInteractor.OnGalleryAPIFinishedListener listener);
 
 }
