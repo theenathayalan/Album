@@ -65,6 +65,12 @@ public class AlbumActivity extends AppCompatActivity implements AlbumView {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
     /**
      * setRecyclerClickListener method is used for set click listener for recyclerView.
      */

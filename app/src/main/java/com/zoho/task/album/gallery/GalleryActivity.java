@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class GalleryActivity extends AppCompatActivity implements GalleryView{
+public class GalleryActivity extends AppCompatActivity implements GalleryView {
 
     private List<GalleryData> galleryDataList;
     private ProgressDialog progressDialog;
@@ -31,7 +31,6 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         initializeObject();
-//        callPhotosAPI();
         galleryPresenter = new GalleryPresenterImpl(this);
         galleryPresenter.callGalleryAPI(this);
     }
@@ -66,32 +65,11 @@ public class GalleryActivity extends AppCompatActivity implements GalleryView{
 
     }
 
-    /**
-     * callPhotosAPI method is used for call the photos api.
-     */
-//    private void callPhotosAPI() {
-//
-//        progressDialog.show();
-//        ApiInterface apiService =
-//                ApiClient.getClient(GalleryActivity.this).create(ApiInterface.class);
-//        Call<List<GalleryData>> call = apiService.getPhotosAPI();
-//        call.enqueue(new Callback<List<GalleryData>>() {
-//            @Override
-//            public void onResponse(Call<List<GalleryData>> call, Response<List<GalleryData>> response) {
-//                galleryDataList = response.body();
-//                setGalleryAdapter();
-//                progressDialog.dismiss();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<GalleryData>> call, Throwable t) {
-//                // Log error here since request failed
-//                Log.e("", t.toString());
-//                progressDialog.dismiss();
-//            }
-//        });
-//
-//    }
+    @Override
+    protected void onDestroy() {
+        galleryPresenter.onDestroy();
+        super.onDestroy();
+    }
 
     /**
      * setGalleryAdapter method is used for set the adapter to recyclerview.
