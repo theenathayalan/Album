@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 
 import com.zoho.task.album.R;
 import com.zoho.task.album.gallery.model.GalleryData;
-import com.zoho.task.album.imageloader.ImageLoader;
+import com.zoho.task.album.imageloader.ImageFetcher;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     private List<GalleryData> galleryDataList;
     private Context mContext;
+    private ImageFetcher mImageFetcher;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView thumbnail;
@@ -32,9 +33,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     }
 
 
-    public GalleryAdapter(Context context, List<GalleryData> galleryDataList) {
+    public GalleryAdapter(Context context, List<GalleryData> galleryDataList, ImageFetcher mImageFetcher) {
         mContext = context;
         this.galleryDataList = galleryDataList;
+        this.mImageFetcher = mImageFetcher;
     }
 
     @Override
@@ -48,8 +50,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         GalleryData galleryData = galleryDataList.get(position);
-
-        ImageLoader.loadThumbnailImage(mContext, galleryData.getThumbnailUrl(), holder.thumbnail, holder.progressBar);
+        mImageFetcher.loadImage(galleryData.getThumbnailUrl(), holder.thumbnail);
     }
 
     @Override
